@@ -9,5 +9,5 @@ pandas
 matplotlib
 seaborn
 scikit-learn
-tensorflow
+Tensorflow
 google.cloud
