@@ -1,5 +1,8 @@
 data
 
+#Mac-OS hidden files
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -153,3 +156,8 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+data
+test_data
+test_data/
+data/
+models/
