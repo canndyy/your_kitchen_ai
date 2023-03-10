@@ -11,3 +11,5 @@ seaborn
 scikit-learn
 Tensorflow
 google.cloud
+roboflow
+Pillow
