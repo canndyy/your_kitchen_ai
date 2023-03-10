@@ -13,3 +13,5 @@ Tensorflow
 google.cloud
 roboflow
 Pillow
+streamlit
+requests
