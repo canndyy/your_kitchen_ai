@@ -10,4 +10,4 @@ RUN pip install --upgrade pip \
 COPY packages ./packages
 COPY docker_data ./docker_data
 
-CMD uvicorn packages.api:app --host 0.0.0.0
+CMD uvicorn packages.api:app --host 0.0.0.0 --port $PORT
