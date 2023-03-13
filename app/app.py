@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from io import StringIO
 import cv2
+from packages import func
 
 ## TODO: import preproc and model function
 
