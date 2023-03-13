@@ -8,5 +8,6 @@ RUN pip install --upgrade pip \
   && apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 
 COPY packages ./packages
+COPY docker_data ./docker_data
 
 CMD uvicorn packages.api:app --host 0.0.0.0
