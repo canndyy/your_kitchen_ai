@@ -11,3 +11,8 @@ seaborn
 scikit-learn
 Tensorflow
 google.cloud
+roboflow
+Pillow
+streamlit
+requests
+cv2
