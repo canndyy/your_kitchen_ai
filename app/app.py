@@ -2,10 +2,9 @@ import streamlit as st
 import streamlit.components.v1 as components
 import numpy as np
 import pandas as pd
-from io import StringIO
+from io import StringIO, BytesIO
 import cv2
-from packages import func
-
+from packages.crop_fridge import crop_fridge
 
 
 ## TODO: import preproc and model function
@@ -29,6 +28,10 @@ if uploaded_file is not None:
     # Display the image:
     st.image(opencv_image, channels="BGR")
 
+    cropped_images = crop_fridge(uploaded_file,30)
+    for img in cropped_images:
+        st.image(img, channels="BGR")
+
 prefs = ['healthy', 'quick', 'mexican','...']
 
 user_prefs = st.sidebar.multiselect(
@@ -38,9 +41,6 @@ user_prefs = st.sidebar.multiselect(
 
 custom_input = ""
 custom_input = st.sidebar.text_input('Freestyle:')
-
-res = requests.post(url + "/upload_image", files={'img': img_bytes})
-
 
 ## Change background color of text box
 # components.html(
