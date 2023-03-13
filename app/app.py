@@ -37,6 +37,9 @@ user_prefs = st.sidebar.multiselect(
 custom_input = ""
 custom_input = st.sidebar.text_input('Freestyle:')
 
+res = requests.post(url + "/upload_image", files={'img': img_bytes})
+
+
 ## Change background color of text box
 # components.html(
 #     """
