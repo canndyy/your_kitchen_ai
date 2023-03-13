@@ -15,5 +15,4 @@ roboflow
 Pillow
 streamlit
 requests
-io
 cv2
