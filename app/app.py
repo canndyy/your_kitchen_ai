@@ -6,6 +6,8 @@ from io import StringIO
 import cv2
 from packages import func
 
+
+
 ## TODO: import preproc and model function
 
 ## Cropping fridge into objects, return cropped images

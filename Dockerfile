@@ -4,8 +4,9 @@ WORKDIR /server
 COPY requirements_api.txt ./requirements_api.txt
 
 RUN pip install --upgrade pip \
-  && pip install -r requirements_api.txt
+  && pip install -r requirements_api.txt \
+  && apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 
 COPY packages ./packages
 
-CMD uvicorn package.api:app --host 0.0.0.0
+CMD uvicorn packages.api:app --host 0.0.0.0

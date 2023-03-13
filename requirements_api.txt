@@ -5,3 +5,4 @@ Tensorflow
 Pillow
 uvicorn
 fastapi
+opencv-python
