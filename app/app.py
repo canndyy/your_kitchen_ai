@@ -17,7 +17,6 @@ def local_css(file_name):
 
 local_css("app/style.css")
 
-
 uploaded_file = st.sidebar.file_uploader("Fridge:", type=['jpg','jpeg'])
 if uploaded_file is not None:
     # Convert the file to an opencv image.
