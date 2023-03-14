@@ -25,5 +25,5 @@ if __name__ == "__main__":
     input_ingred = ["chicken", "potato", "spinach"]
     input_tags = ["dinner", "easy"]
     df_path = os.path.join("docker_data", "final_cleaned_recipes_dataset.pkl")
-    model_path = os.path.join("docker_data", "final_nlp_model_cit_model.pkl")
+    model_path = os.path.join("docker_data", "pickle_nlp_model")
     front_end_display(input_ingred, input_tags, df_path, model_path)
