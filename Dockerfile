@@ -2,7 +2,7 @@ FROM python:3.10.6-buster
 WORKDIR /server
 
 COPY requirements_api.txt ./requirements_api.txt
-COPY .env /.env
+COPY .env ./.env
 
 RUN pip install --upgrade pip \
   && pip install -r requirements_api.txt \
