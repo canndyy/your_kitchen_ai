@@ -15,4 +15,5 @@ roboflow
 Pillow
 streamlit
 requests
-cv2
+uvicorn
+fastapi

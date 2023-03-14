@@ -8,19 +8,19 @@ from urllib.request import urlopen
 import requests
 import nlp_model
 
-def print_recipe_names(df):
-    """Take a dataframe of recipes and print df['Name]"""
+def print_recipe_names(df_path):
+    """Take a dataframe of recipes and print df_path['Name]"""
 
     print(f"These are the top 5 recipes of closest match to your ingredients and preferences: \n")
-    for i, index in df.iterrows():
+    for i, index in df_path.iterrows():
         print(f"{i+1} - {index['Name']}")
     print("\n***************\n")
 
 
-def list_all_recipes_info(df):
+def list_all_recipes_info(df_path):
     """Take a dataframe of recipes and print out all info"""
 
-    for i, index in df.iterrows():
+    for i, index in df_path.iterrows():
         print(f"Recipe Name: {index['Name']}")
         print(f"Recipe ID: {index['index']}\n")
 
@@ -43,17 +43,11 @@ def list_all_recipes_info(df):
         print("Instructions")
         for i, instruction in enumerate(index['instructions'],1):
             print(f"{i}. {instruction}")
-#         try:
-#             response = requests.get(index["images"][0])
-#             img = Image.open(BytesIO(response.content))
-#             plt.imshow(img)
-#             plt.axis("off")
-#         except:
-#             print(f"Image Not Provided")
+
         print("\n===============\n")
 
 
-def show_recipe_images(df):
+def show_recipe_images(df_path):
     """Take dataframe of recipes and number of images to display, function displays images of the recipes '"""
 
     rows = 5
@@ -62,7 +56,7 @@ def show_recipe_images(df):
     fig.set_size_inches(3,15)
     fig.tight_layout(pad=1.0)
 
-    for i,image in enumerate(df['images']):
+    for i,image in enumerate(df_path['images']):
         try:
             response = requests.get(image[0])
             img = Image.open(BytesIO(response.content))
@@ -70,16 +64,15 @@ def show_recipe_images(df):
             axes[i].set_yticklabels([])
             axes[i].set_xticklabels([])
             axes[i].axis('off')
-            axes[i].text(0, 0.7,f"{df['Name'][i]}:\nImage Not Provided", fontsize = "large")
+            axes[i].text(0, 0.7,f"{df[_path'Name'][i]}:\nImage Not Provided", fontsize = "large")
             continue
-        axes[i].set_title(f"{df['Name'][i]}", fontsize = "large")
+        axes[i].set_title(f"{df_path['Name'][i]}", fontsize = "large")
         axes[i].axis('off')
         axes[i].imshow(img)
 
 if __name__ == "__main__":
-    ddf_path = os.path.join("../test_data/kaggle_recipes", "r_cleaned_recipes_3.pkl")
-    df = df_path
+    df_path = os.path.join("../docker_data", "final_cleaned_recipes_dataset.pkl")
 
-    print_recipe_names(df)
-    list_all_recipes_info(df)
-    show_recipe_images(df)
+    print_recipe_names(df_path)
+    list_all_recipes_info(df_path)
+    show_recipe_images(df_path)

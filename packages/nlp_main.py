@@ -12,18 +12,20 @@ from urllib.request import urlopen
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from nlp_model import input_to_recipes_df
-import nlp_frontend
+from nlp_frontend import print_recipe_names, list_all_recipes_info, show_recipe_images
+
+
 
 def front_end_display(input_ingred, input_tags, df_path, model_path):
     df = input_to_recipes_df(input_ingred, input_tags, df_path, model_path)
-    nlp_frontend.print_recipe_names(df)
-    nlp_frontend.list_all_recipes_info(df)
-    nlp_frontend.show_recipe_images(df)
+    print_recipe_names(df)
+    list_all_recipes_info(df)
+    show_recipe_images(df)
+
 
 if __name__ == "__main__":
-    input_ingred = "chicken, potato, spinach"
-    input_tags = "dinner, easy"
-    df_path = os.path.join("../test_data/kaggle_recipes", "r_cleaned_recipes_3.pkl")
-    model_path = os.path.join("../../nlp_models", "nlp_model_cit.model")
-
+    input_ingred = ["chicken", "potato", "spinach"]
+    input_tags = ["dinner", "easy"]
+    df_path = os.path.join("../docker_data", "final_cleaned_recipes_dataset.pkl")
+    model_path = os.path.join("../docker_data", "final_nlp_model_cit.model")
     front_end_display(input_ingred, input_tags, df_path, model_path)

@@ -2,9 +2,14 @@ import streamlit as st
 import streamlit.components.v1 as components
 import numpy as np
 import pandas as pd
-from io import StringIO
+from io import StringIO, BytesIO
 import cv2
-from packages import func
+from packages.crop_fridge import crop_fridge
+
+import requests
+url = "https://kitchen-api-hebwau5dkq-ew.a.run.app"
+res = requests.get(url + "/")
+
 
 ## TODO: import preproc and model function
 
@@ -26,6 +31,10 @@ if uploaded_file is not None:
 
     # Display the image:
     st.image(opencv_image, channels="BGR")
+
+    cropped_images = crop_fridge(uploaded_file,30)
+    for img in cropped_images:
+        st.image(img, channels="BGR")
 
 prefs = ['healthy', 'quick', 'mexican','...']
 

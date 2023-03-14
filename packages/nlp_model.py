@@ -3,14 +3,14 @@ import pandas as pd
 import gensim.downloader
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 
-def input_to_recipes_df(input_ingred, input_tags, df_path, model_path):
+def input_to_recipes_df(input_ingred:list, input_tags:list, df_path, model_path):
     """Take inputed ingredients, preference, recipes dataframe and return top 5 most similar recipes"""
 
     df = pd.read_pickle(df_path)
     model = Doc2Vec.load(model_path)
 
-    all_input = input_ingred + ", " + input_tags
-    tokens = [word.strip() for word in all_input.split(",")]
+    all_input = input_ingred + input_tags
+    tokens = [word.strip(", ") for word in all_input]
     all_vectors = model.infer_vector(tokens)
 
     most_similar_all = model.dv.most_similar([all_vectors], topn = 5)
@@ -26,8 +26,8 @@ def input_to_recipes_df(input_ingred, input_tags, df_path, model_path):
 
 
 if __name__ == "__main__":
-    input_ingred = "chicken, potato, spinach"
-    input_tags = "dinner, easy"
+    input_ingred = ["chicken", "potato", "spinach"]
+    input_tags = ["dinner", "easy"]
     df_path = os.path.join("../test_data/kaggle_recipes", "r_cleaned_recipes_3.pkl")
     model_path = os.path.join("../../nlp_models", "nlp_model_cit.model")
     input_to_recipes_df(input_ingred, input_tags, df_path, model_path)
