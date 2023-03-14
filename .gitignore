@@ -1,5 +1,6 @@
 data
 docker_data
+app/test_app.py
 
 #Mac-OS hidden files
 .DS_Store
@@ -133,6 +134,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.env.yaml
 
 # Spyder project settings
 .spyderproject

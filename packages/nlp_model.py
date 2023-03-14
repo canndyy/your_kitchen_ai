@@ -2,12 +2,15 @@ import os
 import pandas as pd
 import gensim.downloader
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
+from gensim.utils import unpickle, pickle
 
 def input_to_recipes_df(input_ingred:list, input_tags:list, df_path, model_path):
     """Take inputed ingredients, preference, recipes dataframe and return top 5 most similar recipes"""
 
     df = pd.read_pickle(df_path)
-    model = Doc2Vec.load(model_path)
+
+    # model = Doc2Vec.load(model_path)
+    model = unpickle(model_path)
 
     all_input = input_ingred + input_tags
     tokens = [word.strip(", ") for word in all_input]
@@ -20,9 +23,11 @@ def input_to_recipes_df(input_ingred:list, input_tags:list, df_path, model_path)
     all_dict = {}
     for i in most_similar_list_all:
         all_dict[i] = df.iloc[i].to_dict()
+    return all_dict
 
-    most_similar_df_all = pd.DataFrame(all_dict).T.reset_index()
-    return most_similar_df_all
+    # most_similar_df_all = pd.DataFrame(all_dict).T.reset_index()
+    # return most_similar_df_all
+
 
 
 if __name__ == "__main__":
