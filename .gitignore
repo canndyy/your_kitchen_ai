@@ -1,5 +1,6 @@
 data
 docker_data
+test_app
 
 #Mac-OS hidden files
 .DS_Store
