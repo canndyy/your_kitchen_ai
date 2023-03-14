@@ -9,7 +9,7 @@ def input_to_recipes_df(input_ingred:list, input_tags:list, df_path, model_path)
 
     df = pd.read_pickle(df_path)
 
-    # model = Doc2Vec.load(model_path)
+    # unpickle a pickled Doc2Vec model
     model = unpickle(model_path)
 
     all_input = input_ingred + input_tags
@@ -25,8 +25,6 @@ def input_to_recipes_df(input_ingred:list, input_tags:list, df_path, model_path)
         all_dict[i] = df.iloc[i].to_dict()
     return all_dict
 
-    # most_similar_df_all = pd.DataFrame(all_dict).T.reset_index()
-    # return most_similar_df_all
 
 
 
