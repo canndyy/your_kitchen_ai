@@ -10,7 +10,6 @@ import requests
 url = "https://kitchen-api-hebwau5dkq-ew.a.run.app"
 res = requests.get(url + "/")
 
-
 ## TODO: import preproc and model function
 
 ## Cropping fridge into objects, return cropped images
@@ -36,7 +35,7 @@ if uploaded_file is not None:
     for img in cropped_images:
         st.image(img, channels="BGR")
 
-prefs = ['healthy', 'quick', 'mexican','...']
+prefs = ['healthy', 'quick', 'mexican','..']
 
 user_prefs = st.sidebar.multiselect(
     'Preferences:',
@@ -59,6 +58,13 @@ custom_input = st.sidebar.text_input('Freestyle:')
 #     width=0,
 # )
 
-if st.sidebar.button('Go') or (user_prefs != ""):
+if (st.sidebar.button('Go') or (user_prefs != "")) and uploaded_file is not None:
     # Display search results for user_query
     st.write(f"File: {uploaded_file}, Preferences: {user_prefs}, Custom input: {custom_input}")
+    ## make request to predict ingredient
+
+    res1 = requests.get(url + "/")
+    st.write(res1.content)
+
+    res = requests.post(url + "/upload_image", files={'img': cropped_images[0].tobytes()})
+    st.write(res.content)
