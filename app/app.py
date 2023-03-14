@@ -5,8 +5,9 @@ import pandas as pd
 from io import StringIO, BytesIO
 import cv2
 from packages.crop_fridge import crop_fridge
-
+from pydantic import BaseModel
 import requests
+
 url = "https://kitchen-api-hebwau5dkq-ew.a.run.app"
 res = requests.get(url + "/")
 
@@ -24,6 +25,7 @@ local_css("app/style.css")
 
 uploaded_file = st.sidebar.file_uploader("Fridge:", type=['jpg','jpeg'])
 if uploaded_file is not None:
+
     # Convert the file to an opencv image.
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     opencv_image = cv2.imdecode(file_bytes, 1)
@@ -34,6 +36,8 @@ if uploaded_file is not None:
     cropped_images = crop_fridge(uploaded_file,30)
     for img in cropped_images:
         st.image(img, channels="BGR")
+        st.write(type(img))
+
 
 prefs = ['healthy', 'quick', 'mexican','..']
 
@@ -66,5 +70,21 @@ if (st.sidebar.button('Go') or (user_prefs != "")) and uploaded_file is not None
     res1 = requests.get(url + "/")
     st.write(res1.content)
 
-    res = requests.post(url + "/upload_image", files={'img': cropped_images[0].tobytes()})
-    st.write(res.content)
+    arr=opencv_image
+    st.write(type(arr))
+
+    img_shape=arr.shape
+    dtype_arr=arr.dtype
+    byte_arr=arr.tobytes()
+    from_bytes = np.frombuffer(byte_arr, dtype = arr.dtype)
+
+    files = {'my_file': byte_arr}
+
+    # send the POST request with the request body as multipart/form-data
+    response = requests.post(
+    url + '/file',
+    files=files,
+    data={'shape': str(img_shape), 'dtype': str(dtype_arr)}
+    )
+
+    st.write(response.content)
