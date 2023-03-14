@@ -5,8 +5,6 @@ import matplotlib.image as mpimg
 from PIL import Image
 from io import BytesIO
 from urllib.request import urlopen
-import requests
-import nlp_model
 
 def print_recipe_names(df_path):
     """Take a dataframe of recipes and print df_path['Name]"""
@@ -64,7 +62,7 @@ def show_recipe_images(df_path):
             axes[i].set_yticklabels([])
             axes[i].set_xticklabels([])
             axes[i].axis('off')
-            axes[i].text(0, 0.7,f"{df[_path'Name'][i]}:\nImage Not Provided", fontsize = "large")
+            axes[i].text(0, 0.7,f"{df_path['Name'][i]}:\nImage Not Provided", fontsize = "large")
             continue
         axes[i].set_title(f"{df_path['Name'][i]}", fontsize = "large")
         axes[i].axis('off')
