@@ -7,8 +7,8 @@ from packages.crop_fridge import crop_fridge
 from pydantic import BaseModel
 import requests
 
-url = 'http://127.0.0.1:8003'
-# url = "https://kitchen-api-hebwau5dkq-ew.a.run.app"
+# url = 'http://127.0.0.1:8003'
+url = "https://kitchen-api-hebwau5dkq-ew.a.run.app"
 res = requests.get(url + "/")
 
 
