@@ -5,8 +5,7 @@ import numpy as np
 import pandas as pd
 import cv2
 import io
-
-import front_end_display
+from nlp_main import front_end_display
 
 app = FastAPI()
 
@@ -47,3 +46,5 @@ def predict(ingredients: list, *preferences):
     model_path = "../docker_data/final_cleaned_recipes_dataset.pkl"
     predictions = nlp_main.front_end_display(ingredients, preferences, df_path, model_path)
     return {"predictions": predictions}
+
+
