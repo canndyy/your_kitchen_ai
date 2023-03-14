@@ -3,7 +3,7 @@ from PIL import Image
 import os
 import numpy as np
 
-def crop_fridge(fp, confidence):
+def crop_fridge(arr, confidence):
 
     MAX_SIZE = (2000,2000)
 
@@ -11,12 +11,12 @@ def crop_fridge(fp, confidence):
     project = rf.workspace().project("aicook-lcv4d")
     model = project.version(3).model
 
-    im = Image.open(fp)
+    im = Image.fromarray(arr)
     im.thumbnail(MAX_SIZE)
 
-    image_array = np.array(im)
 
-    output_json = model.predict(image_array, confidence=confidence, overlap=30).json()
+
+    output_json = model.predict(arr, confidence=confidence, overlap=30).json()
     image_list = []
     for items in output_json['predictions']:
         image_list.append(im.crop((items['x'] - (items['width']/2),\

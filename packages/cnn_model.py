@@ -4,6 +4,9 @@ from tensorflow.keras import metrics as mets
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.utils import image_dataset_from_directory
 from tensorflow import cast, expand_dims, float32
+import numpy as np
+from tensorflow.image import resize
+
 
 import matplotlib.pyplot as plt
 import pickle #for history
@@ -101,7 +104,7 @@ def create_target_dict():
 
 def load_best_model(model_name = "cnn_best_model", print_model = False):
     #load a model
-    models_folder = os.path.join("..","models")
+    models_folder = os.path.join("","models")
 
     model_path = os.path.join(models_folder,model_name)
 
@@ -148,12 +151,15 @@ def make_predictions_batch(batch_in):
 
 
 def make_one_prediction(img_in):
+
+    prepped_img = convert_image(img_in)
+
     #load model already
-    model_name = "current_best_model"
-    model = load_best_model(model_name)
+    # model_name = "current_best_model"
+    model = load_best_model()
 
     #add image to batch of one so can get prediction
-    image = cast(expand_dims(img_in, 0), float32)
+    image = cast(expand_dims(prepped_img, 0), float32)
 
 
     result = model.predict(image)
@@ -219,3 +225,12 @@ if __name__ == "__main__":
 #if asks for password then give it empty
 
  #gcloud compute scp --recurse jupyter@user-managed-notebook-1678200135:~/gh_folder/your_kitchen_ai/models/current_best_model/ models/cnn_best_model
+
+
+def convert_image(img_in):
+    IMG_SIZE=224
+    rgb_image = img_in.convert('RGB')
+    np_image = np.asarray(rgb_image)
+    image_out = resize(np_image, [IMG_SIZE,IMG_SIZE])
+
+    return image_out
