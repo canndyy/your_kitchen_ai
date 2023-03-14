@@ -5,8 +5,10 @@ import numpy as np
 import pandas as pd
 import cv2
 import io
+
 from nlp_main import front_end_display
 from cnn_model import make_predictions
+
 
 app = FastAPI()
 
@@ -19,6 +21,8 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
+df_path = "docker_data/nlp_model_cit.pkl"
+model_path = "docker_data/final_cleaned_recipes_dataset.pkl"
 
 @app.get('/')
 def index():
@@ -64,4 +68,22 @@ async def receive_image(img: UploadFile=File(...)):
     ingredients = make_predictions(cv2_img)
 
     ### Encoding and responding with the image
+
+
+
+@app.get("/predict")
+def predict(ingredients: str, preferences: str):
+    ingredients_list = [ingred.strip() for ingred in ingredients.split(",")]
+    preferences_list = [pref.strip() for pref in preferences.split(",")]
+
+    predictions = input_to_recipes_df(ingredients_list, preferences_list, df_path, model_path)
+    # predictions = front_end_display(ingredients_list, preferences_list, df_path, model_path)
+    return {"predictions": predictions}
+
+@app.get("/test")
+def hello(ingredients:str, preferences:str):
+    return{"ingred": ingredients,
+           "pref": preferences }
+
     return ingredients
+
