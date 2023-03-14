@@ -6,6 +6,9 @@ from io import StringIO, BytesIO
 import cv2
 from packages.crop_fridge import crop_fridge
 
+import requests
+url = "https://kitchen-api-hebwau5dkq-ew.a.run.app"
+res = requests.get(url + "/")
 
 ## TODO: import preproc and model function
 
