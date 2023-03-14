@@ -126,7 +126,7 @@ def make_predictions(img_list_in):
         #get one prediction
         food, confidence = make_one_prediction(img)
         #append to list
-        predictions_out.append( (food,confidence))
+        predictions_out.append((food,confidence))
 
     print(predictions_out)
 

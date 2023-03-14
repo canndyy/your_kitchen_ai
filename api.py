@@ -30,14 +30,15 @@ def predict_ingredient():
     return make_predictions()
 
 
-@app.post('/file')
+@app.post('/predict_ingreds')
 def file_upload(
         my_file: bytes = File(...),
         shape: str = Form(...),
         dtype: str = Form(...)):
     from_bytes = np.frombuffer(my_file, dtype = dtype)
     reshape = from_bytes.reshape(eval(shape))
-    list_images = crop_fridge(reshape,50)
+    list_images = crop_fridge(reshape[:,:,::-1],30)
+
     results = make_predictions(list_images)
 
     return {"list": results}
