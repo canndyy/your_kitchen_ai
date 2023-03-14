@@ -5,8 +5,10 @@ import numpy as np
 import pandas as pd
 import cv2
 import io
-from packages.nlp_main import front_end_display
-from packages.nlp_model import input_to_recipes_df
+
+from nlp_main import front_end_display
+from cnn_model import make_predictions
+
 
 app = FastAPI()
 
@@ -27,6 +29,33 @@ def index():
     return {'status': True}
 
 
+# @app.post('/upload_image')
+# async def receive_image(img: UploadFile=File(...)):
+#     ### Receiving and decoding the image
+#     contents = await img.read()
+
+#     nparr = np.fromstring(contents, np.uint8)
+#     cv2_img = cv2.imdecode(nparr, cv2.IMREAD_COLOR) # type(cv2_img) => numpy.ndarray
+
+#     ### Do cool stuff with your image.... For example face detection
+#     annotated_img = annotate_face(cv2_img)
+
+#     ### Encoding and responding with the image
+#     im = cv2.imencode('.png', annotated_img)[1] # extension depends on which format is sent from Streamlit
+#     return Response(content=im.tobytes(), media_type="image/png")
+
+@app.get("/predict")
+def predict(ingredients: list, *preferences):
+    df_path = "../docker_data/final_nlp_model_cit.model"
+    model_path = "../docker_data/final_cleaned_recipes_dataset.pkl"
+    predictions = nlp_main.front_end_display(ingredients, preferences, df_path, model_path)
+    return {"predictions": predictions}
+
+@app.post("/predict_ingredient")
+def predict_ingredient():
+    return make_predictions()
+
+
 @app.post('/upload_image')
 async def receive_image(img: UploadFile=File(...)):
     ### Receiving and decoding the image
@@ -36,11 +65,10 @@ async def receive_image(img: UploadFile=File(...)):
     cv2_img = cv2.imdecode(nparr, cv2.IMREAD_COLOR) # type(cv2_img) => numpy.ndarray
 
     ### Do cool stuff with your image.... For example face detection
-    annotated_img = annotate_face(cv2_img)
+    ingredients = make_predictions(cv2_img)
 
     ### Encoding and responding with the image
-    im = cv2.imencode('.png', annotated_img)[1] # extension depends on which format is sent from Streamlit
-    return Response(content=im.tobytes(), media_type="image/png")
+
 
 
 @app.get("/predict")
@@ -56,3 +84,6 @@ def predict(ingredients: str, preferences: str):
 def hello(ingredients:str, preferences:str):
     return{"ingred": ingredients,
            "pref": preferences }
+
+    return ingredients
+
