@@ -5,8 +5,8 @@ import numpy as np
 import pandas as pd
 import cv2
 import io
-
-import front_end_display
+from packages.nlp_main import front_end_display
+from packages.nlp_model import input_to_recipes_df
 
 app = FastAPI()
 
@@ -19,6 +19,8 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
+df_path = "docker_data/nlp_model_cit.pkl"
+model_path = "docker_data/final_cleaned_recipes_dataset.pkl"
 
 @app.get('/')
 def index():
@@ -42,8 +44,15 @@ async def receive_image(img: UploadFile=File(...)):
 
 
 @app.get("/predict")
-def predict(ingredients: list, *preferences):
-    df_path = "../docker_data/final_nlp_model_cit.model"
-    model_path = "../docker_data/final_cleaned_recipes_dataset.pkl"
-    predictions = nlp_main.front_end_display(ingredients, preferences, df_path, model_path)
+def predict(ingredients: str, preferences: str):
+    ingredients_list = [ingred.strip() for ingred in ingredients.split(",")]
+    preferences_list = [pref.strip() for pref in preferences.split(",")]
+
+    predictions = input_to_recipes_df(ingredients_list, preferences_list, df_path, model_path)
+    # predictions = front_end_display(ingredients_list, preferences_list, df_path, model_path)
     return {"predictions": predictions}
+
+@app.get("/test")
+def hello(ingredients:str, preferences:str):
+    return{"ingred": ingredients,
+           "pref": preferences }

@@ -3,6 +3,7 @@ import pandas as pd
 import gensim.downloader
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 
+
 def input_to_recipes_df(input_ingred:list, input_tags:list, df_path, model_path):
     """Take inputed ingredients, preference, recipes dataframe and return top 5 most similar recipes"""
 
@@ -21,8 +22,9 @@ def input_to_recipes_df(input_ingred:list, input_tags:list, df_path, model_path)
     for i in most_similar_list_all:
         all_dict[i] = df.iloc[i].to_dict()
 
-    most_similar_df_all = pd.DataFrame(all_dict).T.reset_index()
-    return most_similar_df_all
+    # most_similar_df_all = pd.DataFrame(all_dict).T.reset_index()
+    # return most_similar_df_all
+    return all_dict
 
 
 if __name__ == "__main__":
