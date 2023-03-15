@@ -9,7 +9,7 @@ RUN pip install --upgrade pip \
 
 COPY packages ./packages
 COPY models ./models
-COPY docker_data ./docker_data
+# COPY docker_data ./docker_data
 COPY api.py ./api.py
 
 CMD uvicorn api:app --host 0.0.0.0 --port $PORT
