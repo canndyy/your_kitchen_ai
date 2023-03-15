@@ -15,22 +15,21 @@ def get_overlap(image1, image2):
     overlap = intersection / union
     return overlap
 
-def crop_fridge(arr, confidence):
-
-    MAX_SIZE = (2000,2000)
+def crop_fridge():
 
     rf = Roboflow(api_key=os.environ['ROBOFLOW_API'])
     project = rf.workspace().project("aicook-lcv4d")
     model = project.version(3).model
 
-    im = Image.fromarray(arr)
-    im.thumbnail(MAX_SIZE)
+    try:
+        output_json = model.predict(os.path.join("fridge_results","results.jpg"), confidence=50, overlap=0).json()
+    except:
+        return 'BAD PHOTO TRY AGAIN'
+    im = Image.open(os.path.join("fridge_results","results.jpg"))
 
-    output_json = model.predict(arr, confidence=confidence, overlap=1).json()
     image_list = []
 
     for item in output_json['predictions']:
-
         x = item['x']
         y = item['y']
         width = item['width']
@@ -52,21 +51,22 @@ def crop_fridge(arr, confidence):
             'confidence': confidence
         })
 
-    image_list.sort(key=lambda x: x['confidence'], reverse=True)
+        image_list.sort(key=lambda x: x['confidence'], reverse=True)
 
-    overlap_threshold = 0
-    for i in range(len(image_list)):
-        for j in range(i+1, len(image_list)):
-            if image_list[i]['confidence'] == 0 or image_list[j]['confidence'] == 0:
-                continue
-            overlap = get_overlap(image_list[i], image_list[j])
-            if overlap > overlap_threshold:
-                image_list[j]['confidence'] = 0
+        overlap_threshold = 0
+        for i in range(len(image_list)):
+            for j in range(i+1, len(image_list)):
+                if image_list[i]['confidence'] == 0 or image_list[j]['confidence'] == 0:
+                    continue
+                overlap = get_overlap(image_list[i], image_list[j])
+                if overlap > overlap_threshold:
+                    image_list[j]['confidence'] = 0
 
-    # create a new list with the non-overlapping detected images
-    non_overlapping_images = []
-    for image in image_list:
-        if image['confidence'] > 0:
-            non_overlapping_images.append(image['image'])
+        # create a new list with the non-overlapping detected images
+        non_overlapping_images = []
+        for image in image_list:
+            if image['confidence'] > 0:
+                non_overlapping_images.append((image['image'],image['class']))
 
-    return non_overlapping_images
+
+    return (output_json, non_overlapping_images)
