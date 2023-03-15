@@ -12,18 +12,8 @@ st.title("Upload an image of your food ingredients here!")
 st.file_uploader("Upload your image here")
 
 # preference drop down menu
-prefs = ["Easy"
-,"< 30 Mins"
-,"< 60 Mins"
-,"< 4 Hours"
-,"Meat"
-,"Vegetable"
-,"Fruit"
-,"Healthy"
-,"Inexpensive"
-,"Dessert"
-,"Beverages"]
+prefs = ["Easy" ,"< 30 Mins","< 60 Mins","< 4 Hours","Meat","Vegetable",\
+    "Fruit","Healthy","Inexpensive","Dessert","Beverages"]
 
 user_prefs = st.multiselect('Preferences:', prefs)
-
-custom_input = st.text_input("Any other keywords you would like to add? (Separate each keyword with a whitespace)", label_visibility="visible")
+custom_input = st.text_input("Any other keywords you would like to add? (Separate each keyword with a comma)", label_visibility="visible")
