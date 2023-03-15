@@ -91,8 +91,7 @@ def create_target_dict():
         'cabbage', 'capsicum', 'carrot',
         'cauliflower', 'celery', 'chicken',
         'cucumber', 'eggplant', 'grape',
-        'kiwi', 'lemon', 'lettuce',
-        'lime', 'milk', 'mushroom',
+        'kiwi', 'lemon', 'lettuce', 'milk', 'mushroom',
         'onion','orange', 'pineapple',
         'pork', 'potato', 'strawberry',
         'tomato', 'white', 'zucchini' ]
@@ -126,29 +125,11 @@ def make_predictions(img_list_in):
         #get one prediction
         food, confidence = make_one_prediction(img)
         #append to list
-        predictions_out.append( (food,confidence))
+        predictions_out.append((food,confidence))
 
     print(predictions_out)
 
     return predictions_out
-
-def make_predictions_batch(batch_in):
-    model_name = "current_best_model"
-    model = load_best_model(model_name)
-    results = model.predict(image)
-    predictions_with_confidence = []
-    target_dict = create_target_dict()
-
-    for result in results:
-        pred_code = result.argmax()
-        prediction = target_dict[pred_code]
-        confidence = result[pred_code]
-        rounded_confidence = "{0:.1f}".format(confidence * 100)
-        predictions_with_confidence.append((prediction, rounded_confidence))
-
-    print(predictions_with_confidence)
-    return predictions_with_confidence
-
 
 def make_one_prediction(img_in):
 

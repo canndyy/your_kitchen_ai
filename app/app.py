@@ -2,43 +2,24 @@ import streamlit as st
 import streamlit.components.v1 as components
 import numpy as np
 import pandas as pd
-from io import StringIO, BytesIO
 import cv2
 from packages.crop_fridge import crop_fridge
 from pydantic import BaseModel
 import requests
 
-url = "https://kitchen-api-hebwau5dkq-ew.a.run.app"
+url = 'http://127.0.0.1:8003'
+# url = "https://kitchen-api-hebwau5dkq-ew.a.run.app"
 res = requests.get(url + "/")
 
-## TODO: import preproc and model function
 
-## Cropping fridge into objects, return cropped images
-## Pass cropped images to ingredient CNN model, return list of ingredients, w confidence
-## Run NLP model with ingredients and user preferences as input, return top recipes
-
+# Load local css file to apply custom styling
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 local_css("app/style.css")
 
-uploaded_file = st.sidebar.file_uploader("Fridge:", type=['jpg','jpeg'])
-if uploaded_file is not None:
-
-    # Convert the file to an opencv image.
-    file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-    opencv_image = cv2.imdecode(file_bytes, 1)
-
-    # Display the image:
-    st.image(opencv_image, channels="BGR")
-
-    cropped_images = crop_fridge(uploaded_file,30)
-    for img in cropped_images:
-        st.image(img, channels="BGR")
-        st.write(type(img))
-
-
+# Store user prefs, custom text input
 prefs = ['healthy', 'quick', 'mexican','..']
 
 user_prefs = st.sidebar.multiselect(
@@ -49,42 +30,49 @@ user_prefs = st.sidebar.multiselect(
 custom_input = ""
 custom_input = st.sidebar.text_input('Freestyle:')
 
-## Change background color of text box
-# components.html(
-#     """
-# <script>
-# const elements = window.parent.document.querySelectorAll('.stTextInput div[data-baseweb="input"] > div')
-# console.log(elements)
-# elements[0].style.backgroundColor = 'red'
-# </script>
-# """,
-#     height=0,
-#     width=0,
-# )
 
-if (st.sidebar.button('Go') or (user_prefs != "")) and uploaded_file is not None:
-    # Display search results for user_query
-    st.write(f"File: {uploaded_file}, Preferences: {user_prefs}, Custom input: {custom_input}")
-    ## make request to predict ingredient
+# Upload fridge photo and return cropped photos of ingredients
+uploaded_file = st.sidebar.file_uploader("Fridge:", type=['jpg','jpeg'])
+if uploaded_file is not None:
 
-    res1 = requests.get(url + "/")
-    st.write(res1.content)
+    # Convert file to an opencv image.
+    file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
+    opencv_image = cv2.imdecode(file_bytes, 1)
 
-    arr=opencv_image
-    st.write(type(arr))
+    # Display fridge:
+    st.image(opencv_image, channels="BGR")
 
-    img_shape=arr.shape
-    dtype_arr=arr.dtype
-    byte_arr=arr.tobytes()
-    from_bytes = np.frombuffer(byte_arr, dtype = arr.dtype)
+    # Crop ingredients from fridge using roboflow model and display
+    cropped_images = crop_fridge(opencv_image[:,:,::-1],30)
 
+    ## make request to predict ingredients
+    img_shape=opencv_image.shape
+    dtype_arr=opencv_image.dtype
+    byte_arr=opencv_image.tobytes()
+    from_bytes = np.frombuffer(byte_arr, dtype = opencv_image.dtype)
     files = {'my_file': byte_arr}
 
     # send the POST request with the request body as multipart/form-data
     response = requests.post(
-    url + '/file',
+    url + '/predict_ingreds',
     files=files,
     data={'shape': str(img_shape), 'dtype': str(dtype_arr)}
     )
 
-    st.write(response.content)
+    # Loop through cropped images, returning image, ingredient, and confidence
+    for img, ingredient_data  in zip(cropped_images, response.json()['list']):
+        st.write(f"{ingredient_data[0].capitalize()} ({ingredient_data[1]}%)")
+        st.image(img, channels="BGR")
+
+    # Get ingredients returned from model and prefences, store both as strings
+    ingredients_list = [ingredient_data[0] for item in response.json()['list']]
+    ingredients_list_str = ','.join(ingredients_list)
+
+    preferences_list = user_prefs + custom_input.split()
+    preferences_list_str = ','.join(preferences_list)
+
+    params = {"ingredients": ingredients_list_str, "preferences": preferences_list_str}
+
+    # Return recipes using NLP model
+    response_nlp = requests.get(url + '/suggest_recipes',params=params)
+    st.write(response_nlp)
