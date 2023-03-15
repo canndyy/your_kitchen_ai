@@ -37,8 +37,7 @@ def file_upload(
         dtype: str = Form(...)):
     from_bytes = np.frombuffer(my_file, dtype = dtype)
     reshape = from_bytes.reshape(eval(shape))
-    print(crop_fridge())
-    list_images = [tuple_[0] for tuple_ in crop_fridge()[1]]
+    list_images = crop_fridge(reshape[:,:,::-1],30)
 
     results = make_predictions(list_images)
 
