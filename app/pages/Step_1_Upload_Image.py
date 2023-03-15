@@ -1,39 +1,26 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import numpy as np
-import pandas as pd
-import cv2
-from packages.crop_fridge import crop_fridge
-from pydantic import BaseModel
-import requests
 from PIL import Image
 import os
+from packages.crop_fridge import crop_fridge
+import cv2
+import requests
 
 url = 'http://127.0.0.1:8003'
 # url = "https://kitchen-api-hebwau5dkq-ew.a.run.app"
-res = requests.get(url + "/")
 
 
-# Load local css file to apply custom styling
-def local_css(file_name):
-    with open(file_name) as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+st.title("Upload an image of your food ingredients here!")
+## image uploader tab
+uploaded_file = st.file_uploader("Upload your image here", type=['jpg','jpeg','png'])
 
-local_css("app/style.css")
+# preference drop down menu
+prefs = ["Easy" ,"< 30 Mins","< 60 Mins","< 4 Hours","Meat","Vegetable",\
+    "Fruit","Healthy","Inexpensive","Dessert","Beverages"]
 
-# Store user prefs, custom text input
-prefs = ['healthy', 'quick', 'mexican','..']
+user_prefs = st.multiselect('Preferences:', prefs)
+custom_input = st.text_input("Any other keywords you would like to add? (Separate each keyword with a comma)", label_visibility="visible")
 
-user_prefs = st.sidebar.multiselect(
-    'Preferences:',
-    prefs,
-    [])
-
-custom_input = ""
-custom_input = st.sidebar.text_input('Freestyle:')
-
-# Upload fridge photo and return cropped photos of ingredients
-uploaded_file = st.sidebar.file_uploader("Fridge:", type=['jpg','jpeg'])
 if uploaded_file is not None:
     MAX_SIZE = (2000,2000)
 
@@ -43,8 +30,6 @@ if uploaded_file is not None:
     image = Image.open(uploaded_file)
     image.thumbnail(MAX_SIZE)
     image.save(os.path.join("fridge_results","results.jpg"))
-
-    st.image(image)
 
     # Crop ingredients from fridge using roboflow model and display
     cropped_images_data = crop_fridge()
@@ -57,6 +42,10 @@ if uploaded_file is not None:
     byte_arr=opencv_image.tobytes()
     from_bytes = np.frombuffer(byte_arr, dtype = opencv_image.dtype)
     files = {'my_file': byte_arr}
+
+
+# col1, col2, col3 = st.columns(3)
+if st.button('Ready, steady, cook!'):
 
     # send the POST request with the request body as multipart/form-data
     response = requests.post(
@@ -76,11 +65,23 @@ if uploaded_file is not None:
 
     # Loop through cropped images, returning image, ingredient, and confidence
 
-    for ing, conf, cnn_data, image  in zip(roboflow_ingredients,roboflow_confidences, response.json()['list'], cropped_images_data[1]):
-        st.write(f"CNN prediction: {cnn_data[0].capitalize()} ({cnn_data[1]}%)")
-        st.write(f"Roboflow prediction: {ing.capitalize()}, {'{:.2%}'.format(conf)}")
-        st.image(image[0])
 
-    # Return recipes using NLP model
-    response_nlp = requests.get(url + '/suggest_recipes',params=params)
-    st.write(response_nlp)
+    # for i, ingredient in enumerate(column_names['ingredients']):
+    # st.markdown(ingredient.capitalize())
+
+    num_ingredients = len(roboflow_ingredients)
+    images = cropped_images_data[1]
+
+    # Divide the screen width into `len(images)` columns
+    cols = st.columns(num_ingredients)
+
+    # Display each image in a separate column
+    with st.container():
+        for i, image in enumerate(images):
+            with cols[i]:
+                # st.write(f"{response.json()['list'][i][0].capitalize()} ({response.json()['list'][i][1]}%)")
+                st.write(f"{roboflow_ingredients[i].capitalize()} {'{:.1%}'.format(roboflow_confidences[i])}")
+                st.image(image[0], use_column_width=True)
+
+    st.session_state['ings'] = ingredients_list_str
+    st.session_state['prefs'] = preferences_list_str

@@ -4,13 +4,13 @@ import gensim.downloader
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from gensim.utils import unpickle, pickle
 
-def input_to_recipes_df(input_ingred:list, input_tags:list, df_path, model_path):
+def input_to_recipes_df(input_ingred:list, input_tags:list, df, model):
     """Take inputed ingredients, preference, recipes dataframe and return top 5 most similar recipes"""
 
-    df = pd.read_pickle(df_path)
+    # df = pd.read_pickle(df_path)
 
-    # unpickle a pickled Doc2Vec model
-    model = unpickle(model_path)
+    # # unpickle a pickled Doc2Vec model
+    # model = unpickle(model_path)
 
     all_input = input_ingred + input_tags
     tokens = [word.strip(", ") for word in all_input]
