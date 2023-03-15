@@ -2,7 +2,8 @@ from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import Response
 import numpy as np
-
+import pandas as pd
+from gensim.utils import unpickle, pickle
 
 from packages.cnn_model import make_predictions
 from PIL import Image
@@ -37,18 +38,21 @@ def file_upload(
         dtype: str = Form(...)):
     from_bytes = np.frombuffer(my_file, dtype = dtype)
     reshape = from_bytes.reshape(eval(shape))
-    list_images = crop_fridge(reshape[:,:,::-1],30)
+    print(crop_fridge())
+    list_images = [tuple_[0] for tuple_ in crop_fridge()[1]]
 
     results = make_predictions(list_images)
 
     return {"list": results}
 
-df_path = "docker_data/final_cleaned_recipes_dataset.pkl"
-model_path = "docker_data/pickle_nlp_model"
+df_path = "data/final_cleaned_recipes_dataset.pkl"
+model_path = 'models/pickle_nlp_model'
+df=pd.read_pickle(df_path)
+model=unpickle(model_path)
 
 @app.get("/suggest_recipes")
 def predict(ingredients: str, preferences: str):
     ingredients_list = [ingred.strip() for ingred in ingredients.split(",")]
     preferences_list = [pref.strip() for pref in preferences.split(",")]
-    suggestions = input_to_recipes_df(ingredients_list, preferences_list, df_path, model_path)
+    suggestions = input_to_recipes_df(ingredients_list, preferences_list, df, model)
     return {"suggest_recipes": suggestions}
