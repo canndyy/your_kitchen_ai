@@ -6,6 +6,8 @@ import cv2
 from packages.crop_fridge import crop_fridge
 from pydantic import BaseModel
 import requests
+from PIL import Image
+import os
 
 url = 'http://127.0.0.1:8003'
 # url = "https://kitchen-api-hebwau5dkq-ew.a.run.app"
@@ -30,20 +32,24 @@ user_prefs = st.sidebar.multiselect(
 custom_input = ""
 custom_input = st.sidebar.text_input('Freestyle:')
 
-
 # Upload fridge photo and return cropped photos of ingredients
 uploaded_file = st.sidebar.file_uploader("Fridge:", type=['jpg','jpeg'])
 if uploaded_file is not None:
+    MAX_SIZE = (2000,2000)
 
-    # Convert file to an opencv image.
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     opencv_image = cv2.imdecode(file_bytes, 1)
 
-    # Display fridge:
-    st.image(opencv_image, channels="BGR")
+    image = Image.open(uploaded_file)
+    image.thumbnail(MAX_SIZE)
+    image.save(os.path.join("fridge_results","results.jpg"))
+
+    st.image(image)
 
     # Crop ingredients from fridge using roboflow model and display
-    cropped_images = crop_fridge(opencv_image[:,:,::-1],30)
+    cropped_images_data = crop_fridge()
+    roboflow_ingredients = [item['class'] for item in cropped_images_data[0]['predictions']]
+    roboflow_confidences = [item['confidence'] for item in cropped_images_data[0]['predictions']]
 
     ## make request to predict ingredients
     img_shape=opencv_image.shape
@@ -59,19 +65,22 @@ if uploaded_file is not None:
     data={'shape': str(img_shape), 'dtype': str(dtype_arr)}
     )
 
-    # Loop through cropped images, returning image, ingredient, and confidence
-    for img, ingredient_data  in zip(cropped_images, response.json()['list']):
-        st.write(f"{ingredient_data[0].capitalize()} ({ingredient_data[1]}%)")
-        st.image(img, channels="BGR")
-
     # Get ingredients returned from model and prefences, store both as strings
-    ingredients_list = [ingredient_data[0] for item in response.json()['list']]
+    ingredients_list = [ingredient_data[0] for ingredient_data in response.json()['list']]
     ingredients_list_str = ','.join(ingredients_list)
 
     preferences_list = user_prefs + custom_input.split()
     preferences_list_str = ','.join(preferences_list)
 
     params = {"ingredients": ingredients_list_str, "preferences": preferences_list_str}
+
+    # Loop through cropped images, returning image, ingredient, and confidence
+
+    for ing, conf, cnn_data, image  in zip(roboflow_ingredients,roboflow_confidences, response.json()['list'], cropped_images_data[1]):
+        st.write(f"CNN prediction: {cnn_data[0].capitalize()} ({cnn_data[1]}%)")
+        st.write(f"Roboflow prediction: {ing.capitalize()}, {'{:.2%}'.format(conf)}")
+        st.image(image[0])
+
 
     # Return recipes using NLP model
     response_nlp = requests.get(url + '/suggest_recipes',params=params)
