@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import Response
 import numpy as np
 
-# from nlp_main import front_end_display
+
 from packages.cnn_model import make_predictions
 from PIL import Image
 from packages.crop_fridge import crop_fridge
@@ -51,5 +51,4 @@ def predict(ingredients: str, preferences: str):
     ingredients_list = [ingred.strip() for ingred in ingredients.split(",")]
     preferences_list = [pref.strip() for pref in preferences.split(",")]
     suggestions = input_to_recipes_df(ingredients_list, preferences_list, df_path, model_path)
-    # predictions = front_end_display(ingredients_list, preferences_list, df_path, model_path)
     return {"suggest_recipes": suggestions}
