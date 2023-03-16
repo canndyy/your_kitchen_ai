@@ -171,16 +171,61 @@ def make_vit_prediction(img_in, model,index=0):
 
     return pred_class, rounded_confidence
 
-def make_predictions(img_list_in, model):
-    print(f"making {len(img_list_in)} predictions...")
+# def make_predictions(img_list_in, model):
+#     print(f"making {len(img_list_in)} predictions...")
 
+#     predictions_out = []
+#     for index, img in enumerate(img_list_in):
+#         print("predicting ", index)
+#         #get one prediction
+#         #food, confidence = make_one_prediction(img, model,index)
+#         food, confidence = make_vit_prediction(img, model,index)
+
+#         #append to list
+#         predictions_out.append((food,confidence))
+#         print(f"thinks image {index} is {food}")
+
+#     print(predictions_out)
+
+#     return predictions_out
+
+def make_predictions_refactored(img_list_in, model):
+    print(f"making {len(img_list_in)} predictions...")
 
     predictions_out = []
     for index, img in enumerate(img_list_in):
         print("predicting ", index)
-        #get one prediction
+        #make one prediction
+
+        rgb_image = img.convert('RGB')
+        np_image = np.array(rgb_image)
+        cheeky_bgr = np_image[:, :, ::-1].copy()
+        full_resize = cv2.resize(cheeky_bgr, (200,200))
+        rgb_cv2 = cv2.cvtColor(full_resize, cv2.COLOR_BGR2RGB)
+        #rgb_cv2 = full_resize[:, :, ::-1].copy() #also works, I was saving wrong variable
+        prepped_img = np.array(rgb_cv2).reshape(1,200,200,3)
+
+        result = model.predict(prepped_img)
+        #result looks like [0.1, 0.4, 0.5]
+        print("before", result)
+
+        result = np.array( [softmax(result[0])] )
+        print("after", result)
+
+        target_dict = create_target_dict()
+        pred_encoded = result.argmax()
+
+        #breakpoint()
+        pred_class = target_dict[pred_encoded]
+        print("vit result123123: ", result)
+        print("vit result argmax: ", pred_encoded)
+        print("vit class: ", pred_class)
+        confidence = result[0][pred_encoded] #batch size 1
+        rounded_confidence = "{0:.1f}".format(confidence * 100)
+
+        food, confidence = pred_class, rounded_confidence
         #food, confidence = make_one_prediction(img, model,index)
-        food, confidence = make_vit_prediction(img, model,index)
+        #food, confidence = make_vit_prediction(img, model,index)
 
         #append to list
         predictions_out.append((food,confidence))
@@ -190,6 +235,10 @@ def make_predictions(img_list_in, model):
 
     return predictions_out
 
+#convert back from logit
+def softmax(x):
+    """Compute softmax values for each sets of scores in x."""
+    return np.exp(x) / np.sum(np.exp(x), axis=0)
 
 def convert_image_old(img_in):
     IMG_SIZE=224
