@@ -5,7 +5,8 @@ import numpy as np
 import pandas as pd
 from gensim.utils import unpickle, pickle
 
-from packages.cnn_model import make_predictions, load_best_model, load_vit_model
+from packages.cnn_model import  load_best_model, load_vit_model # make_predictions,
+from packages.cnn_model import make_predictions_refactored
 from PIL import Image
 from packages.crop_fridge import crop_fridge
 from pydantic import BaseModel
@@ -46,7 +47,8 @@ def file_upload(
 
     list_images = [tuple_[0] for tuple_ in crop_fridge()[1]]
 
-    results = make_predictions(list_images, app.state.cnn_model)
+    #results = make_predictions(list_images, app.state.cnn_model)
+    results = make_predictions_refactored(list_images, app.state.cnn_model)
 
     return {"list": results}
 

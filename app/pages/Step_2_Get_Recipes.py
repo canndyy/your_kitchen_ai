@@ -7,7 +7,8 @@ st.set_page_config(
             layout="wide",
             initial_sidebar_state="collapsed")
 
-url = 'http://127.0.0.1:8003'
+#url = 'http://127.0.0.1:8003'
+url = 'http://localhost:8000'
 
 if 'ings' not in st.session_state:
     st.session_state['ings'] = 0

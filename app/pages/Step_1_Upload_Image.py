@@ -12,7 +12,8 @@ st.set_page_config(
             layout="wide",
             initial_sidebar_state="collapsed")
 
-url = 'http://127.0.0.1:8003'
+#url = 'http://127.0.0.1:8003'
+url = 'http://localhost:8000'
 # url = "https://kitchen-api-hebwau5dkq-ew.a.run.app"
 
 
@@ -85,7 +86,7 @@ if st.button('Ready, steady, cook!'):
     with st.container():
         for i, image in enumerate(images):
             with cols[i]:
-                # st.write(f"{response.json()['list'][i][0].capitalize()} ({response.json()['list'][i][1]}%)")
+                st.write(f"{response.json()['list'][i][0].capitalize()} ({response.json()['list'][i][1]}%)")
                 st.write(f"{roboflow_ingredients[i].capitalize()} {'{:.1%}'.format(roboflow_confidences[i])}")
                 st.image(image[0], use_column_width=True)
 
