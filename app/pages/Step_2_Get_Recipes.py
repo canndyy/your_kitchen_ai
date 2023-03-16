@@ -1,6 +1,12 @@
 import streamlit as st
 import requests
 
+st.set_page_config(
+            page_title="RECIPE RACCOON",
+            page_icon=":raccoon:",
+            layout="wide",
+            initial_sidebar_state="collapsed")
+
 url = 'http://127.0.0.1:8003'
 
 if 'ings' not in st.session_state:
