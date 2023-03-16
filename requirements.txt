@@ -17,3 +17,5 @@ streamlit
 requests
 uvicorn
 fastapi
+streamlit_extras
+
