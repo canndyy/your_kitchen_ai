@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from gensim.utils import unpickle, pickle
 
-from packages.cnn_model import make_predictions
+from packages.cnn_model import make_predictions, load_best_model, load_vit_model
 from PIL import Image
 from packages.crop_fridge import crop_fridge
 from pydantic import BaseModel
@@ -22,6 +22,10 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
+#app.state.cnn_model =  load_best_model("cherry_picked_1500")
+
+app.state.cnn_model =  load_vit_model()
+
 @app.get('/')
 def index():
     return {'status': True}
@@ -36,12 +40,13 @@ def file_upload(
         my_file: bytes = File(...),
         shape: str = Form(...),
         dtype: str = Form(...)):
+
     from_bytes = np.frombuffer(my_file, dtype = dtype)
     reshape = from_bytes.reshape(eval(shape))
-    print(crop_fridge())
+
     list_images = [tuple_[0] for tuple_ in crop_fridge()[1]]
 
-    results = make_predictions(list_images)
+    results = make_predictions(list_images, app.state.cnn_model)
 
     return {"list": results}
 

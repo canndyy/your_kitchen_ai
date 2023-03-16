@@ -5,8 +5,10 @@ from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.utils import image_dataset_from_directory
 from tensorflow import cast, expand_dims, float32
 import numpy as np
-from tensorflow.image import resize
-
+from tensorflow.image import resize,resize_with_pad
+from PIL import Image
+import tensorflow_addons as tfa
+import cv2
 
 import matplotlib.pyplot as plt
 import pickle #for history
@@ -90,11 +92,11 @@ def create_target_dict():
         'beef', 'blueberry', 'broccoli',
         'cabbage', 'capsicum', 'carrot',
         'cauliflower', 'celery', 'chicken',
-        'cucumber', 'eggplant', 'grape',
-        'kiwi', 'lemon', 'lettuce', 'milk', 'mushroom',
-        'onion','orange', 'pineapple',
+        'eggplant', 'grape',
+        'lemon', 'lettuce', 'milk', 'mushroom',
+        'orange', 'pineapple',
         'pork', 'potato', 'strawberry',
-        'tomato', 'white', 'zucchini' ]
+        'tomato', 'white', 'zucchini' ] #'cucumber', kiwi, onion
 
     for i, food in enumerate(classes_list):
         classes_dict[i] = food
@@ -117,36 +119,141 @@ def load_best_model(model_name = "cnn_best_model", print_model = False):
 
     return model
 
-def make_predictions(img_list_in):
+def load_vit_model():
+    model_name = "vit_food_cherry"
+    models_folder = os.path.join("","models","vit_model_cherry")
+    model_path = os.path.join(models_folder,model_name)
+
+    loaded_model = models.load_model(model_path)
+
+    return loaded_model
+
+
+def make_vit_prediction(img_in, model,index=0):
+
+    print(type(img_in)) # PIL Image
+    print("mode: ", img_in.mode)
+
+    rgb_image = img_in.convert('RGB')
+    np_image = np.array(rgb_image)
+    cheeky_bgr = np_image[:, :, ::-1].copy()
+    full_resize = cv2.resize(cheeky_bgr, (200,200))
+    rgb_cv2 = cv2.cvtColor(full_resize, cv2.COLOR_BGR2RGB)
+    #rgb_cv2 = full_resize[:, :, ::-1].copy() #also works, I was saving wrong variable
+    prepped_img = np.array(rgb_cv2).reshape(1,200,200,3)
+
+    # Convert RGB to BGR
+    #open_cv_image = np_image[:, :, ::-1].copy()
+    #full_resize = cv2.resize(open_cv_image, (200,200))
+    #prepped_img = np.array(full_resize).reshape(1,200,200,3)
+
+#SAVING FILE
+    save_folder = os.path.join("","temp")
+    filename = f"vit_sees_cv2color_{index}.jpg"
+    save_path = os.path.join(save_folder,filename)
+    #rgb_image.save(save_path)
+    cv2.imwrite(save_path, rgb_cv2)
+    # resized = cv2.resize(img_in, (200,200))
+    # prepped_img = resized
+
+    result = model.predict(prepped_img)
+    #result looks like [0.1, 0.4, 0.5]
+
+    target_dict = create_target_dict()
+    print("vit result: ", result)
+    pred_encoded = result.argmax()
+    print("vit result argmax: ", pred_encoded)
+    #breakpoint()
+    pred_class = target_dict[pred_encoded]
+    print("vit class: ", pred_class)
+    confidence = result[0][pred_encoded] #batch size 1
+    rounded_confidence = "{0:.1f}".format(confidence * 100)
+
+    return pred_class, rounded_confidence
+
+def make_predictions(img_list_in, model):
     print(f"making {len(img_list_in)} predictions...")
 
+
     predictions_out = []
-    for img in img_list_in:
+    for index, img in enumerate(img_list_in):
+        print("predicting ", index)
         #get one prediction
-        food, confidence = make_one_prediction(img)
+        #food, confidence = make_one_prediction(img, model,index)
+        food, confidence = make_vit_prediction(img, model,index)
+
         #append to list
         predictions_out.append((food,confidence))
+        print(f"thinks image {index} is {food}")
 
     print(predictions_out)
 
     return predictions_out
 
-def make_one_prediction(img_in):
 
-    prepped_img = convert_image(img_in)
+def convert_image_old(img_in):
+    IMG_SIZE=224
+    rgb_image = img_in.convert('RGB')
+    np_image = np.asarray(rgb_image)
+    image_out = resize(np_image, [IMG_SIZE,IMG_SIZE])
+
+    return image_out
+
+def prep_image_new(img_in,index):
+
+    #image_orig = Image.open(img_in)
+    print("type of image in:", type(img_in))
+
+    rgb_image = img_in.convert('RGB')
+    image_np = np.array(rgb_image)
+    print("np image shape: ", image_np.shape)
+
+    print("np image max: ", image_np.max())
+    print("np image min: ", image_np.min())
+
+    image_rescaled = image_np/255
+    print("image_rescaled max: ", image_rescaled.max())
+    print("image_rescaled min: ", image_rescaled.min())
+
+    save_folder = os.path.join("","temp")
+    filename = f"cnn_sees_{index}.jpg"
+    save_path = os.path.join(save_folder,filename)
+    image_rescaled.save(save_path)
+    #cv2.imwrite(save_path, image_np)
+    # turns everything into strawberries...
+    # image_rescaled = image_np/255
+    # image_resized = resize_with_pad(image_rescaled, IMG_SIZE,IMG_SIZE, antialias=True)
+
+    #image_resized = resize_with_pad(image_np, IMG_SIZE,IMG_SIZE, antialias=True)
+
+    image_resized = resize(image_rescaled, (IMG_SIZE,IMG_SIZE))
+    print("resized image:", image_resized.shape)
+
+    image_as_batch = cast(expand_dims(image_resized, 0), float32)
+    return image_as_batch
+
+
+
+def make_one_prediction(img_in, model, index):
+
+    #prepped_img = convert_image_old(img_in)
+    prepped_img = prep_image_new(img_in, index)
 
     #load model already
     # model_name = "current_best_model"
-    model = load_best_model()
+    #model = load_best_model()
+
+    #model = app.state.cnn_model
 
     #add image to batch of one so can get prediction
-    image = cast(expand_dims(prepped_img, 0), float32)
+    #image = cast(expand_dims(prepped_img, 0), float32)
+    #result = model.predict(image)
 
-
-    result = model.predict(image)
+    result = model.predict(prepped_img)
     #result looks like [0.1, 0.4, 0.5]
 
     target_dict = create_target_dict()
+
     pred_encoded = result.argmax()
     #breakpoint()
     pred_class = target_dict[pred_encoded]
@@ -208,10 +315,11 @@ if __name__ == "__main__":
  #gcloud compute scp --recurse jupyter@user-managed-notebook-1678200135:~/gh_folder/your_kitchen_ai/models/current_best_model/ models/cnn_best_model
 
 
-def convert_image(img_in):
-    IMG_SIZE=224
-    rgb_image = img_in.convert('RGB')
-    np_image = np.asarray(rgb_image)
-    image_out = resize(np_image, [IMG_SIZE,IMG_SIZE])
+# gcloud compute scp --recurse jupyter@user-managed-notebook-1678200135:~/gh_folder/your_kitchen_ai/test_data/17_250_no_lime 17_250_no_lime
 
-    return image_out
+ #gcloud compute scp --recurse jupyter@user-managed-notebook-1678200135:~/gh_folder/your_kitchen_ai/models/vgg_cherry_picked_no_split/ models/cherry_picked_first
+
+#gcloud compute scp --recurse jupyter@user-managed-notebook-1678200135:~/gh_folder/your_kitchen_ai/models/vgg_cherry_picked_no_split_dense_1500/ models/cherry_picked_1500
+
+# im_bgr = cv2.imread(f"data/cherry_picked/{filename}/{file.name}")
+# RGB_image = im_bgr[:, :, ::-1]

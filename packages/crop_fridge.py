@@ -2,6 +2,7 @@ from roboflow import Roboflow
 from PIL import Image
 import os
 import numpy as np
+import cv2
 
 def get_overlap(image1, image2):
     x1 = max(image1['left'], image2['left'])
@@ -21,14 +22,25 @@ def crop_fridge():
     project = rf.workspace().project("aicook-lcv4d")
     model = project.version(3).model
 
+    #try converting fridge to rgb before
+    #im_test = Image.open(os.path.join("fridge_results","results.jpg"))
+
+    #im_test = cv2.imread(os.path.join("fridge_results","results.jpg"))
+    #convert to bgr
+    #BGR_test_image = im_test[:, :, ::-1]
+
     try:
-        output_json = model.predict(os.path.join("fridge_results","results.jpg"), confidence=50, overlap=0).json()
+        output_json = model.predict(os.path.join("fridge_results","results.jpg"), confidence=50, overlap=0).json() #50
+        #output_json = model.predict(BGR_test_image, confidence=30, overlap=0).json()
+
     except:
         return 'BAD PHOTO TRY AGAIN'
     im = Image.open(os.path.join("fridge_results","results.jpg"))
 
     image_list = []
 
+    ## Cropping an image
+    #cropped_image = img[80:280, 150:330]
     for item in output_json['predictions']:
         x = item['x']
         y = item['y']
@@ -37,6 +49,7 @@ def crop_fridge():
         confidence = item['confidence']
         class_name = item['class']
         image = im.crop((x - (width/2), y - (height/2), x + (width/2), y + (height/2)))
+        #image = BGR_test_image[y - (height/2):y + (height/2) , x - (width/2) : x + (width/2)] #[height, width]
         image_list.append({
             'image': image,
             'x': x,
