@@ -6,6 +6,12 @@ from packages.crop_fridge import crop_fridge
 import cv2
 import requests
 
+st.set_page_config(
+            page_title="RECIPE RACCOON",
+            page_icon=":raccoon:",
+            layout="wide",
+            initial_sidebar_state="collapsed")
+
 url = 'http://127.0.0.1:8003'
 # url = "https://kitchen-api-hebwau5dkq-ew.a.run.app"
 
