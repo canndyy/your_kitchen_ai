@@ -4,13 +4,15 @@ from starlette.responses import Response
 import numpy as np
 
 
-from packages.cnn_model import make_predictions
+from packages.cnn_model import make_predictions, load_best_model
 from PIL import Image
 from packages.crop_fridge import crop_fridge
 from pydantic import BaseModel
 from packages.nlp_model import input_to_recipes_df
 
 app = FastAPI(max_request_size=1000 * 1024 * 1024)
+
+app.state.cnn_model =  load_best_model()
 
 # Allow all requests (optional, good for development purposes)
 app.add_middleware(
@@ -25,10 +27,6 @@ app.add_middleware(
 def index():
     return {'status': True}
 
-@app.post("/predict_ingredient")
-def predict_ingredient():
-    return make_predictions()
-
 
 @app.post('/predict_ingreds')
 def file_upload(
@@ -39,7 +37,9 @@ def file_upload(
     reshape = from_bytes.reshape(eval(shape))
     list_images = crop_fridge(reshape[:,:,::-1],30)
 
-    results = make_predictions(list_images)
+    results = make_predictions(list_images, app.state.cnn_model)
+    print("----- made predictions!")
+    print(results)
 
     return {"list": results}
 

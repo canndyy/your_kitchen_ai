@@ -10,6 +10,8 @@ from PIL import Image
 import os
 
 url = 'http://127.0.0.1:8003'
+url = 'http://localhost:8000'
+
 # url = "https://kitchen-api-hebwau5dkq-ew.a.run.app"
 res = requests.get(url + "/")
 
