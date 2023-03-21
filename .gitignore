@@ -5,6 +5,7 @@ app/test_app.py
 app_old
 cat_load_bucket
 .python-version
+cat
 
 #Mac-OS hidden files
 .DS_Store
