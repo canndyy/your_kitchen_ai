@@ -20,6 +20,5 @@ requests
 uvicorn
 fastapi
 gensim==4.3.0
-opencv-python
+opencv-python-headless
 python-multipart
-
