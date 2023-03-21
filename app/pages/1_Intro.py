@@ -56,10 +56,14 @@ col_c.markdown(f"# :two:\n ## Specify your preferences")
 col_d.markdown(f'# :three:\n ## Our app will suggest recipes based on ingredients and preferences you provide!')
 
 st.markdown("----")
-columns = st.columns((2, 1, 2))
+columns = st.columns((1,2, 2, 1))
 get_started = columns[1].button("I want to upload an image !! ")
 if get_started:
-    switch_page("Upload")
+    switch_page("upload")
+
+about_us = columns[2].button(" About Us ")
+if about_us:
+    switch_page("about")
 st.markdown("----")
 
-st.markdown("[Back To Homepage](%s)" % url_main)
+# st.markdown("[Back To Homepage](%s)" % url_main)
