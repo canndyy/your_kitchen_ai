@@ -66,6 +66,7 @@ if st.button('Ready, steady, cook!'):
     data={'shape': str(img_shape), 'dtype': str(dtype_arr)}
     )
 
+    # st.markdown(response.content)
     # Get ingredients returned from model and prefences, store both as strings
     ingredients_list = [ingredient_data[0] for ingredient_data in response.json()['list']]
     ingredients_list_str = ','.join(ingredients_list)
@@ -87,6 +88,7 @@ if st.button('Ready, steady, cook!'):
     # Display each image in a separate column
     st.markdown(f"## I can see ...")
 
+    
     for i in range(0,num_ingredients): # number of rows in your table! = 2
         cols = st.columns(4) # number of columns in each row! = 2
         # first column of the ith row
