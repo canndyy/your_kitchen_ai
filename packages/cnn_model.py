@@ -90,19 +90,24 @@ def create_target_dict():
     classes_list = [
         'apple', 'avocado', 'banana',
         'beef', 'blueberry', 'broccoli',
-        'cabbage', 'capsicum', 'carrot',
+        'cabbage', 'bell_pepper', 'carrot',
         'cauliflower', 'celery', 'chicken',
-        'eggplant', 'grape',
+        'aubergine', 'grape',
         'lemon', 'lettuce', 'milk', 'mushroom',
         'orange', 'pineapple',
         'pork', 'potato', 'strawberry',
-        'tomato', 'white_wine', 'zucchini' ] #'cucumber', kiwi, onion
+        'tomato', 'white_wine', 'courgette' ] #'cucumber', kiwi, onion
 
-    # classes_list = ["apple", "aubergine", "banana", "bell_pepper", "beef",
-    #                 "blueberry", "broccoli", "carrot", "cauliflower", "celery",
-    #                 "courgette", "chicken", "lemon", "lettuce", "milk",
-    #                 "orange", "pineapple", "potato", "strawberry", "tomato",
-    #                 "white_wine",]
+    # classes_list = [
+    #     'apple', 'avocado', 'banana',
+    #     'strawberry', 'blueberry', 'broccoli',
+    #     'lettuce', 'bell_pepper', 'carrot',
+    #     'courgette', 'celery', 'milk',
+    #     'aubergine', 'grape',
+    #     'lemon', 'cabbage', 'chicken', 'mushroom',
+    #     'orange', 'pineapple',
+    #     'pork', 'potato', 'beef',
+    #     'tomato', 'white_wine', 'cauliflower' ] #!!! *__*
 
     for i, food in enumerate(classes_list):
         classes_dict[i] = food

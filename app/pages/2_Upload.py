@@ -18,8 +18,8 @@ st.set_page_config(
 #unicorn host + url
 url = 'http://0.0.0.0:8000'
 
-st.title("Upload an image of your food ingredients here!")
 ## image uploader tab
+st.title("Upload an image of your food ingredients here!")
 uploaded_file = st.file_uploader("Upload your image here", type=['jpg','jpeg','png'])
 
 if uploaded_file is not None:
@@ -56,7 +56,7 @@ user_prefs = st.multiselect('Preferences:', prefs)
 custom_input = st.text_input("Any other keywords you would like to add? ", label_visibility="visible")
 
 
-# col1, col2, col3 = st.columns(3)
+
 if st.button('Ready, steady, cook!'):
 
     # send the POST request with the request body as multipart/form-data
@@ -75,9 +75,6 @@ if st.button('Ready, steady, cook!'):
 
     params = {"ingredients": ingredients_list_str, "preferences": preferences_list_str}
 
-    # for i, ingredient in enumerate(column_names['ingredients']):
-    # st.markdown(ingredient.capitalize())
-
     num_ingredients = len(roboflow_ingredients)
     images = cropped_images_data[1]
 
@@ -87,6 +84,7 @@ if st.button('Ready, steady, cook!'):
     # Display each image in a separate column
     st.markdown(f"## I can see ...")
 
+
     for i in range(0,num_ingredients): # number of rows in your table! = 2
         cols = st.columns(4) # number of columns in each row! = 2
         # first column of the ith row
@@ -94,21 +92,18 @@ if st.button('Ready, steady, cook!'):
 
         try:
             cols[0].write(f"{response.json()['list'][4*i][0].capitalize()} {response.json()['list'][4*i][1]}%")
-            # cols[0].write(f"{roboflow_ingredients[4*i].capitalize()} {'{:.0%}'.format(roboflow_confidences[i])}")
             cols[0].image(images[4*i][0])
         except:
             pass
 
         try:
             cols[1].write(f"{response.json()['list'][(4*i)+1][0].capitalize()} {response.json()['list'][(4*i)+1][1]}%")
-            # cols[1].write(f"{roboflow_ingredients[(4*i)+1].capitalize()} {'{:.0%}'.format(roboflow_confidences[i])}")
             cols[1].image(images[(4*i)+1][0])
         except:
             pass
 
         try:
             cols[2].write(f"{response.json()['list'][(4*i)+2][0].capitalize()} {response.json()['list'][(4*i)+2][1]}%")
-            # cols[2].write(f"{roboflow_ingredients[(4*i)+2].capitalize()} {'{:.0%}'.format(roboflow_confidences[i])}")
             cols[2].image(images[(4*i)+2][0])
 
         except:
@@ -116,7 +111,6 @@ if st.button('Ready, steady, cook!'):
 
         try:
             cols[3].write(f"{response.json()['list'][(4*i)+3][0].capitalize()} {response.json()['list'][(4*i)+3][1]}%")
-            # cols[3].write(f"{roboflow_ingredients[(4*i)+3].capitalize()} {'{:.0%}'.format(roboflow_confidences[i])}")
             cols[3].image(images[(4*i)+3][0])
         except:
             pass
@@ -125,8 +119,9 @@ if st.button('Ready, steady, cook!'):
     st.session_state['ings'] = ingredients_list_str
     st.session_state['prefs'] = preferences_list_str
 
-    columns = st.columns((2, 1, 2))
-    get_recipes = columns[1].button("Get me recipes")
 
-    if get_recipes:
-        switch_page("3_Recipes")
+columns = st.columns((2, 1, 2))
+get_recipes = columns[1].button("Get me recipes - only click after confirming your ingredients")
+
+if get_recipes:
+    switch_page("recipes")
