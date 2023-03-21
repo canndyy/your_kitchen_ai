@@ -1,6 +1,10 @@
 data
 docker_data
 app/test_app.py
+.vscode
+app_old
+cat_load_bucket
+.python-version
 
 #Mac-OS hidden files
 .DS_Store

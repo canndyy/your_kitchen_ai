@@ -96,7 +96,13 @@ def create_target_dict():
         'lemon', 'lettuce', 'milk', 'mushroom',
         'orange', 'pineapple',
         'pork', 'potato', 'strawberry',
-        'tomato', 'white', 'zucchini' ] #'cucumber', kiwi, onion
+        'tomato', 'white_wine', 'zucchini' ] #'cucumber', kiwi, onion
+
+    # classes_list = ["apple", "aubergine", "banana", "bell_pepper", "beef",
+    #                 "blueberry", "broccoli", "carrot", "cauliflower", "celery",
+    #                 "courgette", "chicken", "lemon", "lettuce", "milk",
+    #                 "orange", "pineapple", "potato", "strawberry", "tomato",
+    #                 "white_wine",]
 
     for i, food in enumerate(classes_list):
         classes_dict[i] = food
@@ -122,6 +128,8 @@ def load_best_model(model_name = "cnn_best_model", print_model = False):
 def load_vit_model():
     model_name = "vit_food_cherry"
     models_folder = os.path.join("","models","vit_model_cherry")
+    # model_name = "new_model_21_classes"
+    # models_folder = os.path.join("models")
     model_path = os.path.join(models_folder,model_name)
 
     loaded_model = models.load_model(model_path)
@@ -137,9 +145,11 @@ def make_vit_prediction(img_in, model,index=0):
     rgb_image = img_in.convert('RGB')
     np_image = np.array(rgb_image)
     cheeky_bgr = np_image[:, :, ::-1].copy()
+    # full_resize = cv2.resize(cheeky_bgr, (224,224))
     full_resize = cv2.resize(cheeky_bgr, (200,200))
     rgb_cv2 = cv2.cvtColor(full_resize, cv2.COLOR_BGR2RGB)
     #rgb_cv2 = full_resize[:, :, ::-1].copy() #also works, I was saving wrong variable
+    # prepped_img = np.array(rgb_cv2).reshape(1,224,224,3)
     prepped_img = np.array(rgb_cv2).reshape(1,200,200,3)
 
     # Convert RGB to BGR
@@ -200,9 +210,11 @@ def make_predictions_refactored(img_list_in, model):
         rgb_image = img.convert('RGB')
         np_image = np.array(rgb_image)
         cheeky_bgr = np_image[:, :, ::-1].copy()
+        # full_resize = cv2.resize(cheeky_bgr, (224,224))
         full_resize = cv2.resize(cheeky_bgr, (200,200))
         rgb_cv2 = cv2.cvtColor(full_resize, cv2.COLOR_BGR2RGB)
         #rgb_cv2 = full_resize[:, :, ::-1].copy() #also works, I was saving wrong variable
+        # prepped_img = np.array(rgb_cv2).reshape(1,224,224,3)
         prepped_img = np.array(rgb_cv2).reshape(1,200,200,3)
 
         result = model.predict(prepped_img)
@@ -215,7 +227,9 @@ def make_predictions_refactored(img_list_in, model):
         target_dict = create_target_dict()
         pred_encoded = result.argmax()
 
-        #breakpoint()
+        # print(f"{target_dict}, argmax ----- {pred_encoded}")
+
+    #     #breakpoint()
         pred_class = target_dict[pred_encoded]
         print("vit result123123: ", result)
         print("vit result argmax: ", pred_encoded)
@@ -231,7 +245,7 @@ def make_predictions_refactored(img_list_in, model):
         predictions_out.append((food,confidence))
         print(f"thinks image {index} is {food}")
 
-    print(predictions_out)
+    # print(predictions_out)
 
     return predictions_out
 

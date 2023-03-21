@@ -15,19 +15,12 @@ st.set_page_config(
             layout="wide",
             initial_sidebar_state="collapsed")
 
+#unicorn host + url
 url = 'http://0.0.0.0:8000'
-# url = "https://kitchen-api-hebwau5dkq-ew.a.run.app"
 
 st.title("Upload an image of your food ingredients here!")
 ## image uploader tab
 uploaded_file = st.file_uploader("Upload your image here", type=['jpg','jpeg','png'])
-
-# preference drop down menu
-prefs = ["Easy" ,"< 30 Mins","< 60 Mins","< 4 Hours","Meat","Vegetable",\
-    "Fruit","Healthy","Inexpensive","Dessert","Beverages"]
-
-user_prefs = st.multiselect('Preferences:', prefs)
-custom_input = st.text_input("Any other keywords you would like to add? (Separate each keyword with a comma)", label_visibility="visible")
 
 if uploaded_file is not None:
     MAX_SIZE = (2000,2000)
@@ -50,6 +43,18 @@ if uploaded_file is not None:
     byte_arr=opencv_image.tobytes()
     from_bytes = np.frombuffer(byte_arr, dtype = opencv_image.dtype)
     files = {'my_file': byte_arr}
+
+    #show image
+    st.image(uploaded_file, width = 500)
+
+
+# preference drop down menu
+prefs = ["Easy" ,"< 30 Mins","< 60 Mins","< 4 Hours","Meat","Vegetable",\
+    "Fruit","Healthy","Inexpensive","Dessert","Beverages"]
+
+user_prefs = st.multiselect('Preferences:', prefs)
+custom_input = st.text_input("Any other keywords you would like to add? ", label_visibility="visible")
+
 
 # col1, col2, col3 = st.columns(3)
 if st.button('Ready, steady, cook!'):
@@ -80,19 +85,7 @@ if st.button('Ready, steady, cook!'):
     cols = st.columns(num_ingredients)
 
     # Display each image in a separate column
-    # with st.container():
-    #     for i, image in enumerate(images):
-    #         with cols[i]:
-    #             # st.write(f"{response.json()['list'][i][0].capitalize()} ({response.json()['list'][i][1]}%)")
-    #             st.write(f"{roboflow_ingredients[i].capitalize()} {'{:.1%}'.format(roboflow_confidences[i])}")
-    #             st.image(image[0], use_column_width=True)
-    #             st.write(type(image[0]))
-
-    #st.write(response.json()['list'])
-    #st.write(response.json()['list'][4*0][0].capitalize())
-    # st.write('{:.0%}'.format(response.json()['list'][4*0][1]))
-    #st.write(num_ingredients)
-
+    st.markdown(f"## I can see ...")
 
     for i in range(0,num_ingredients): # number of rows in your table! = 2
         cols = st.columns(4) # number of columns in each row! = 2
@@ -136,4 +129,4 @@ if st.button('Ready, steady, cook!'):
     get_recipes = columns[1].button("Get me recipes")
 
     if get_recipes:
-        switch_page("Recipes")
+        switch_page("3_Recipes")

@@ -52,7 +52,8 @@ def file_upload(
 
     return {"list": results}
 
-df_path = "data/final_cleaned_recipes_dataset.pkl"
+# df_path = "data/final_cleaned_recipes_dataset.pkl"
+df_path = "models/final_cleaned_recipes_dataset.pkl"
 model_path = 'models/pickle_nlp_model'
 df=pd.read_pickle(df_path)
 model=unpickle(model_path)
