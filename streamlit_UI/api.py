@@ -63,4 +63,5 @@ def predict(ingredients: str, preferences: str):
     ingredients_list = [ingred.strip() for ingred in ingredients.split(",")]
     preferences_list = [pref.strip() for pref in preferences.split(",")]
     suggestions = input_to_recipes_df(ingredients_list, preferences_list, df, model)
+    print ({"suggest_recipes": suggestions})
     return {"suggest_recipes": suggestions}
