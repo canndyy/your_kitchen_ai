@@ -1,13 +1,4 @@
-#apt dependencies to allow opencv to run on streamlit
 
-freeglut3-dev
-libgtk2.0-dev
-libgl1-mesa-glx
-tesseract-ocr
-libtesseract-dev
-libtesseract4
-tesseract-ocr-all
 
-ffmpeg
-libsm6
-libxext6
+
+libgl1
