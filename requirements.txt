@@ -1,5 +1,6 @@
 #given defaults
 #run pip install -r requirements.txt #from inside project virtual environment
+
 pytest
 pylint
 ipdb
@@ -16,7 +17,6 @@ Pillow
 streamlit
 streamlit_extras
 requests
-io
 uvicorn
 fastapi
 gensim==4.3.0
