@@ -39,7 +39,7 @@ Feel free to explore our work, however as our CNN and NLP models are no longer a
 
 This is a streamlit link of our application's expected user experience if you are interested: [RECIPE RACCOON](https://canndyy-kitchen-ai.streamlit.app/)
 
-## Dateset Reference
+## Datasets 
 
 ### Image dataset
 We manually went through and used some images in the following 3 datasets, with some images also obtained through image web scrapping from mainstream supermarket websites, Google Shopping and Google Image.
@@ -50,7 +50,7 @@ Our final image dataset contains 26 classes of food ingredients with at least 30
 
 [Vegetable Image Dataset](https://www.kaggle.com/datasets/misrakahmed/vegetable-image-dataset)
 
-[Fruits and Vegetables Image Recognition Dataset](https://www.kaggle.com/datasets/kritikseth/fruit-and-vegetable-image-recognition) - As of 22 Mar 23 this dataset contains incorrect images, with test images also found inside validation and training set. Please filter before using.
+[Fruits and Vegetables Image Recognition Dataset](https://www.kaggle.com/datasets/kritikseth/fruit-and-vegetable-image-recognition) - As of 22 Mar 23 this dataset contains incorrect images, with test images also found inside validation and training set. Filtering is required before using.
 
 ### Recipe dataset
 [Food.com - Recipes and Reviews](https://www.kaggle.com/datasets/irkaal/foodcom-recipes-and-reviews)
