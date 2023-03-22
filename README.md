@@ -2,7 +2,7 @@
 
 # RECIPE RACCOON
 
-Recipe Raccoon is an Computer Vision and NLP AI product built with Python that identify images of food ingredients and suggest customised recipes.
+Recipe Raccoon is a Computer Vision and NLP AI product built with Python that identify images of food ingredients and suggest customised recipes.
 
 The product is a deep learning model that consists of:
 
@@ -13,6 +13,13 @@ The product is a deep learning model that consists of:
 3) Recipe Processing Model - developed using Natural Language Processing (NLP) with Gensim Doc2vec
 
 Built by [Candy](https://github.com/canndyy), [Louis](https://github.com/JammyNinja), and [Paul](https://github.com/paulbridi) in the Le Wagon Data Science bootcamp in March 2023.
+
+
+## Demo
+Feel free to explore our work, however as our CNN and NLP models are no longer available on a cloud platform, the application is no longer running :(
+
+This is a streamlit link of our application's expected user experience if you are interested: [RECIPE RACCOON](https://bit.ly/3FHS2Gv)
+
 
 ## Installation
 
@@ -33,11 +40,6 @@ To run the frontend use streamlit to run our Home.py:
 ```bash
 streamlit run app/Home.py
 ```
-
-## Demo
-Feel free to explore our work, however as our CNN and NLP models are no longer available on a cloud platform, the application is no longer running :(
-
-This is a streamlit link of our application's expected user experience if you are interested: [RECIPE RACCOON](https://bit.ly/3FHS2Gv)
 
 ## Datasets 
 
