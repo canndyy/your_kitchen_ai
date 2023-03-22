@@ -53,7 +53,7 @@ prefs = ["Easy" ,"< 30 Mins","< 60 Mins","< 4 Hours","Meat","Vegetable",\
     "Fruit","Healthy","Inexpensive","Dessert","Beverages"]
 
 user_prefs = st.multiselect('Preferences:', prefs)
-custom_input = st.text_input("Any other keywords you would like to add? ", label_visibility="visible")
+custom_input = st.text_input("Any other keywords you would like to add? ")
 
 
 

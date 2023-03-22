@@ -1,8 +1,6 @@
 import streamlit as st
 from streamlit_extras.switch_page_button import switch_page
 
-# usable background image links
-# "https://images.pexels.com/photos/616401/pexels-photo-616401.jpeg"
 
 st.set_page_config(
             page_title="RECIPE RACCOON",
@@ -10,8 +8,6 @@ st.set_page_config(
             layout="wide",
             initial_sidebar_state="collapsed")
 
-# homepage local url
-url_main = 'http://localhost:8502/'
 
 #### CSS Styles ####
 st.markdown("""
@@ -19,7 +15,7 @@ st.markdown("""
 <style>
 .stApp {
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("https://raw.githubusercontent.com/paulbridi/kitchen_ai_app/master/intro_bg%20_large.jpeg");
+    url("https://raw.githubusercontent.com/canndyy/your_kitchen_ai/master/intro_bg%20_large.jpeg");
     background-size: 1500px 1000px;
     position: fixed;
 }
@@ -65,5 +61,3 @@ about_us = columns[2].button(" About Us ")
 if about_us:
     switch_page("about")
 st.markdown("----")
-
-# st.markdown("[Back To Homepage](%s)" % url_main)

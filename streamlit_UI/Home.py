@@ -11,10 +11,6 @@ st.set_page_config(
             layout="wide",
             initial_sidebar_state="collapsed")
 
-#### Usable background images
-# "https://images.pexels.com/photos/12221953/pexels-photo-12221953.jpeg"
-# "https://images.pexels.com/photos/3952055/pexels-photo-3952055.jpeg"
-
 #### CSS Styles ####
 st.markdown("""
 <meta charset="UTF-8">
@@ -43,11 +39,7 @@ st.markdown("""
 for i in range(6):
     st.markdown("")
 col = st.columns((0.5,0.5,3,0.5,0.5))
-# image = Image.open("app/logo_1.jpeg")
-col[2].image("https://raw.githubusercontent.com/paulbridi/kitchen_ai_app/master/logo_1.jpeg")
-# st.markdown('<p class="header"><b>&#127859 RECIPE RACCOON<b> &#129437</p>', unsafe_allow_html=True)
-# st.markdown('<p class="sub_header"><b>Unleash Your Inner Chef<b></p>', unsafe_allow_html=True)
-
+col[2].image("hhttps://raw.githubusercontent.com/canndyy/your_kitchen_ai/master/logo_1.jpeg")
 
 st.markdown("----")
 columns = st.columns((2, 1, 2))

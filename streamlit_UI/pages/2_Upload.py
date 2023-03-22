@@ -1,10 +1,4 @@
 import streamlit as st
-# import numpy as np
-# from PIL import Image
-# import os
-# from packages.crop_fridge import crop_fridge
-# import cv2
-# import requests
 from streamlit_extras.switch_page_button import switch_page
 
 
@@ -14,9 +8,6 @@ st.set_page_config(
             page_icon=":raccoon:",
             layout="wide",
             initial_sidebar_state="collapsed")
-
-#unicorn host + url
-# url = 'http://0.0.0.0:8000'
 
 st.title("Upload an image of your food ingredients here!")
 
@@ -32,7 +23,7 @@ prefs = ["Easy" ,"< 30 Mins","< 60 Mins","< 4 Hours","Meat","Vegetable",\
     "Fruit","Healthy","Inexpensive","Dessert","Beverages"]
 
 user_prefs = st.multiselect('Preferences:', prefs)
-custom_input = st.text_input("Any other keywords you would like to add? ", label_visibility="visible")
+custom_input = st.text_input("Any other keywords you would like to add? ")
 
 
 # col1, col2, col3 = st.columns(3)
