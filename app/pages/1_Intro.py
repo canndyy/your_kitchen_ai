@@ -16,7 +16,7 @@ st.markdown("""
 <style>
 .stApp {
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("https://raw.githubusercontent.com/paulbridi/kitchen_ai_app/master/intro_bg%20_large.jpeg");
+    url("https://raw.githubusercontent.com/canndyy/your_kitchen_ai/master/intro_bg%20_large.jpeg");
     background-size: 1500px 1000px;
     position: fixed;
 }

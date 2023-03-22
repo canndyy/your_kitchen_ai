@@ -34,10 +34,7 @@ col5.markdown(f"#### :wastebasket: Prevents food waste")
 
 
 st.markdown("----")
-st.markdown(f"# This product is built by ... ")
-columns = st.columns((1, 2, 2, 2))
-columns[0].markdown(f"")
-columns[1].markdown(f"## Candy")
-columns[2].markdown(f"## Paul")
-columns[3].markdown(f"## Louis")
+st.markdown(f"### This product is built by [Candy](https://github.com/canndyy),\
+    [Louis](https://github.com/JammyNinja), and [Paul](https://github.com/paulbridi)")
+st.markdown(f"### Le Wagon Data Science bootcamp March 2023")
 st.markdown("----")

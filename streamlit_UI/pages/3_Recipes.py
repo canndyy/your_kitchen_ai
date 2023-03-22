@@ -1,5 +1,5 @@
 import streamlit as st
-import requests
+from streamlit_extras.switch_page_button import switch_page
 
 #### set favicon and title of the page in the browser tab
 st.set_page_config(
@@ -10,15 +10,10 @@ st.set_page_config(
 
 
 # url = 'http://0.0.0.0:8000'
-
-
 # if 'ings' not in st.session_state:
 #     st.session_state['ings'] = 0
-
 # if 'prefs' not in st.session_state:
 #     st.session_state['prefs'] = 0
-
-
 # parameters = {"ingredients": st.session_state['ings'],
 #               "preferences": st.session_state['prefs']}
 
