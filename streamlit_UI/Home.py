@@ -39,7 +39,7 @@ st.markdown("""
 for i in range(6):
     st.markdown("")
 col = st.columns((0.5,0.5,3,0.5,0.5))
-col[2].image("hhttps://raw.githubusercontent.com/canndyy/your_kitchen_ai/master/logo_1.jpeg")
+col[2].image("https://raw.githubusercontent.com/canndyy/your_kitchen_ai/master/logo_1.jpeg")
 
 st.markdown("----")
 columns = st.columns((2, 1, 2))
