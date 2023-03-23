@@ -15,7 +15,7 @@ st.title("Upload an image of your food ingredients here!")
 uploaded_file = st.file_uploader("Upload your image here", type=['jpg','jpeg','png'])
 #show image
 if st.button('Uploading is not available in this version - Click here to use our sample image'):
-    st.image("https://raw.githubusercontent.com/canndyy/your_kitchen_ai/master/streamlit_UI/st_ui_images/my_ingredients_large.jpeg", width = 500)
+    st.image("https://raw.githubusercontent.com/canndyy/your_kitchen_ai/master/streamlit_UI/st_ui_images/my_ingredients_copy.jpg", width = 500)
 
 
 # preference drop down menu
@@ -28,14 +28,14 @@ custom_input = st.text_input("Any other keywords you would like to add? ")
 
 # col1, col2, col3 = st.columns(3)
 if st.button('Ready, steady, cook!'):
-    st.image("https://raw.githubusercontent.com/canndyy/your_kitchen_ai/master/streamlit_UI/st_ui_images/my_ingredients_large.jpeg", width = 500)
+    st.image("https://raw.githubusercontent.com/canndyy/your_kitchen_ai/master/streamlit_UI/st_ui_images/my_ingredients_copy.jpg", width = 500)
 
     st.markdown("")
     st.markdown(f"Please note the actual model is not available for public access")
     st.markdown(f"The following is just an example display image of what the model is expected to return")
-    st.markdown(f"Work still needs to be done on improving accuracy --- chicken is predicted as milk and orange as lemon !!! ")
+    st.markdown(f"Work is still being done on improving accuracy")
 
-    st.image("https://raw.githubusercontent.com/canndyy/your_kitchen_ai/master/streamlit_UI/st_ui_images/example_predictions.jpeg")
+    st.image("https://raw.githubusercontent.com/canndyy/your_kitchen_ai/master/streamlit_UI/st_ui_images/model_prediction.jpeg")
 
 for i in range(9):
     st.markdown("")
