@@ -46,7 +46,7 @@ We want to create a product that can allow users to explore new recipe ideas and
 
 
 ## Demo
-Feel free to explore our work, however as our CNN and NLP models are no longer available on a cloud platform, the application is no longer running :(
+Feel free to explore our work, however as our models are no longer available on a cloud platform, the application is no longer running :(
 
 This is a streamlit link of our application's expected user experience if you are interested: [RECIPE RACCOON](https://bit.ly/3FHS2Gv)
 
