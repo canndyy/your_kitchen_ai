@@ -8,9 +8,9 @@ The product is a deep learning model that consists of:
 
 1) Object detection Model - transfer learning from [Roboflow aicook](https://universe.roboflow.com/karel-cornelis-q2qqg/aicook-lcv4d)
 
-2) Image Recognition Model - developed using Convolutional Neural Network (CNN) and Vision Transformer (ViT) with Tensorflow Keras
+2) Image Recognition Model - developed using Vision Transformer (ViT)
 
-3) Recipe Processing Model - developed using Natural Language Processing (NLP) with Gensim Doc2vec
+3) Recipe Processing Model - developed using Natural Language Processing (NLP)
 
 Built by [Candy](https://github.com/canndyy), [Louis](https://github.com/JammyNinja), and [Paul](https://github.com/paulbridi) in the Le Wagon Data Science bootcamp in March 2023.
 
