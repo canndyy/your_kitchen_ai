@@ -25,7 +25,6 @@ We want to create a product that can allow users to explore new recipe ideas and
 <a href="https://numpy.org/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/numpy/numpy-ar21.svg" alt="NumPy" title="numpy" width="40" height="40"/> </a> 
 <a href="https://git-scm.com/" target="_blank" rel="noreferrer"><img src="https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png" alt="Git" title="Git" width="40" height="40"/> </a> 
 <a href="https://pandas.pydata.org/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/2ae2a900d2f041da66e950e4d48052658d850630/icons/pandas/pandas-original.svg" alt="pandas" title="pandas" width="40" height="40"/> </a> 
-<a href="https://scikit-learn.org/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/scikit-learn/scikit-learn.png" alt="scikit-learn" title="scikit-learn" width="40" height="40"/></a> 
 <a href="https://www.tensorflow.org" target="_blank" rel="noreferrer"> 
 <img src="https://www.vectorlogo.zone/logos/tensorflow/tensorflow-icon.svg" alt="tensorflow" title="tensorflow" width="40" height="40"/> </a>  
 <a href="https://radimrehurek.com/gensim/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/RaRe-Technologies/gensim/develop/docs/src/readme_images/rare.png" alt="gensim" title="gensim" width="40" height="40"/> </a>
